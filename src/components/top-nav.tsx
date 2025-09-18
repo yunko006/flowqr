@@ -1,9 +1,14 @@
+"use client";
+
 import Link from "next/link";
-import { Github, Moon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ModeToggle } from "./mode-toggle";
+import { authClient } from "@/lib/auth-client";
+import UserDropdown from "./user-dropdown";
 
 export function TopNav() {
+  const { data: session, isPending } = authClient.useSession();
+
   return (
     <nav className="border-b dark:border-gray-800 dark:bg-black border-gray-200 bg-white">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -58,16 +63,39 @@ export function TopNav() {
             </div>
           </div>
 
-          {/* Right side icons */}
+          {/* Right side - Auth buttons ou user menu */}
           <div className="flex items-center space-x-4">
-            <Link href="/auth/login">
-              <Button variant="outline" size="sm">
-                Log in
-              </Button>
-            </Link>
-            <Link href="/auth.signup">
-              <Button size="sm">Sign up</Button>
-            </Link>
+            {isPending ? (
+              // Skeleton/loading pendant le chargement
+              <div className="flex items-center space-x-2">
+                <div className="h-8 w-16 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
+                <div className="h-8 w-20 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
+              </div>
+            ) : session?.user ? (
+              // Utilisateur connecté
+              <>
+                <Link href="/hello">
+                  <Button variant="outline" size="sm">
+                    Dashboard
+                  </Button>
+                </Link>
+                {/* sign out ici */}
+
+                <UserDropdown user={session.user} />
+              </>
+            ) : (
+              // Utilisateur non connecté
+              <>
+                <Link href="/auth/login">
+                  <Button variant="outline" size="sm">
+                    Log in
+                  </Button>
+                </Link>
+                <Link href="/auth/signup">
+                  <Button size="sm">Sign up</Button>
+                </Link>
+              </>
+            )}
             <ModeToggle />
           </div>
         </div>
