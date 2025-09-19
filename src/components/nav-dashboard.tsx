@@ -6,7 +6,7 @@ import { ModeToggle } from "./mode-toggle";
 import { authClient } from "@/lib/auth-client";
 import UserDropdown from "./user-dropdown";
 
-export function TopNav() {
+export function NavDashboard() {
   const { data: session, isPending } = authClient.useSession();
 
   return (
@@ -31,34 +31,22 @@ export function TopNav() {
           <div className="hidden md:block">
             <div className="ml-10 flex items-baseline space-x-8">
               <Link
-                href="/hello"
+                href="/dashboard"
                 className="dark:text-gray-300 dark:hover:text-white text-gray-600 hover:text-black px-3 py-2 text-sm font-medium transition-colors"
               >
-                hello
+                Dashboard
               </Link>
               <Link
-                href="/pricing"
+                href="/qr-codes"
                 className="dark:text-white text-black px-3 py-2 text-sm font-medium border-b-2 border-white dark:border-white"
               >
-                docs
+                Mes flows
               </Link>
               <Link
-                href="/changelogs"
+                href="/create"
                 className="dark:text-gray-300 dark:hover:text-white text-gray-600 hover:text-black px-3 py-2 text-sm font-medium transition-colors"
               >
-                changelogs
-              </Link>
-              <Link
-                href="/blogs"
-                className="dark:text-gray-300 dark:hover:text-white text-gray-600 hover:text-black px-3 py-2 text-sm font-medium transition-colors"
-              >
-                blogs
-              </Link>
-              <Link
-                href="/community"
-                className="dark:text-gray-300 dark:hover:text-white text-gray-600 hover:text-black px-3 py-2 text-sm font-medium transition-colors"
-              >
-                community
+                Créé
               </Link>
             </div>
           </div>
@@ -74,11 +62,6 @@ export function TopNav() {
             ) : session?.user ? (
               // Utilisateur connecté
               <>
-                <Link href="/dashboard">
-                  <Button variant="outline" size="sm">
-                    Dashboard
-                  </Button>
-                </Link>
                 {/* sign out ici */}
 
                 <UserDropdown user={session.user} />
