@@ -66,8 +66,8 @@ export default function UserDropdown({ user }: { user: any }) {
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
-          <Link href="/hello" className="flex items-center">
-            Hello
+          <Link href="/dashboard" className="flex items-center">
+            dashboard
           </Link>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
