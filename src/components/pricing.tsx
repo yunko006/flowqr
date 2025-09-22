@@ -205,7 +205,7 @@ export function PricingSection() {
                           size="lg"
                           onClick={() => {
                             // Redirigez vers votre page d'inscription ou dashboard
-                            window.location.href = "/signup";
+                            window.location.href = "/";
                           }}
                         >
                           {plan.buttonText}
