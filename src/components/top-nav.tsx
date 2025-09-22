@@ -40,7 +40,7 @@ export function TopNav() {
                 href="/pricing"
                 className="dark:text-white text-black px-3 py-2 text-sm font-medium border-b-2 border-white dark:border-white"
               >
-                docs
+                pricing
               </Link>
               <Link
                 href="/changelogs"
@@ -49,10 +49,10 @@ export function TopNav() {
                 changelogs
               </Link>
               <Link
-                href="/blogs"
+                href="/docs"
                 className="dark:text-gray-300 dark:hover:text-white text-gray-600 hover:text-black px-3 py-2 text-sm font-medium transition-colors"
               >
-                blogs
+                docs
               </Link>
               <Link
                 href="/community"
