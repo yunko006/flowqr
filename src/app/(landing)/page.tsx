@@ -13,7 +13,7 @@ import {
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen w-full bg-black relative">
+    <div className="min-h-screen w-full bg-background relative">
       {/* Vercel Grid */}
       <div
         className="absolute inset-0 opacity-30"
