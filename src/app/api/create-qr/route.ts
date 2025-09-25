@@ -10,7 +10,7 @@ export const GET = async (req: Request, res: Response) => {
   const results = await polar.events.ingest({
     events: [
       {
-        name: "qr_creation",
+        name: "create-qr",
         // Replace with your logic to get the customer id
         externalCustomerId: "3kdIYnW0yWZpU5bWzkzemZWUW2jFUYNi",
         metadata: {
