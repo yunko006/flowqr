@@ -1,44 +1,37 @@
-// app/api/webhooks/polar/route.ts
 import { NextRequest, NextResponse } from "next/server";
+import {
+  validateEvent,
+  WebhookVerificationError,
+} from "@polar-sh/sdk/webhooks";
 
-export async function POST(request: NextRequest) {
+export async function POST(req: NextRequest) {
   try {
-    // Récupérer le body en JSON
-    const event = await request.json();
+    // Récupérer le body brut en tant que string
+    const body = await req.text();
 
-    // Log simple pour voir que ça marche
-    console.log("🎯 Webhook Polar reçu!", {
-      type: event.type,
-      id: event.id || "no-id",
-      timestamp: new Date().toISOString(),
+    // Convertir les headers Next.js en objet simple
+    const headers: Record<string, string> = {};
+    req.headers.forEach((value, key) => {
+      headers[key] = value;
     });
 
-    // Afficher les données reçues
-    console.log("📦 Données:", JSON.stringify(event, null, 2));
-
-    // Réponse simple
-    return NextResponse.json(
-      {
-        message: "Webhook reçu avec succès!",
-        eventType: event.type,
-        received: true,
-      },
-      { status: 200 }
+    // Valider l'événement webhook
+    const event = validateEvent(
+      body,
+      headers,
+      process.env.POLAR_WEBHOOK_SECRET ?? ""
     );
+
+    // Traiter l'événement ici
+    console.log("Event reçu:", event);
+
+    return new NextResponse("", { status: 202 });
   } catch (error) {
-    console.error("❌ Erreur webhook:", error);
+    if (error instanceof WebhookVerificationError) {
+      return new NextResponse("", { status: 403 });
+    }
 
-    return NextResponse.json(
-      { error: "Erreur lors du traitement" },
-      { status: 500 }
-    );
+    console.error("Erreur webhook:", error);
+    return new NextResponse("Internal Server Error", { status: 500 });
   }
-}
-
-// Route GET pour tester que l'endpoint existe
-export async function GET() {
-  return NextResponse.json({
-    message: "Endpoint webhook Polar actif ✅",
-    timestamp: new Date().toISOString(),
-  });
 }
