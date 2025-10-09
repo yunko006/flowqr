@@ -15,6 +15,13 @@
       "when": 1757500412519,
       "tag": "0001_fresh_shadowcat",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1760015624508,
+      "tag": "0002_lowly_zeigeist",
+      "breakpoints": true
     }
   ]
 }
