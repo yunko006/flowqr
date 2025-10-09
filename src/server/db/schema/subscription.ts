@@ -8,16 +8,23 @@ export const createTable = pgTableCreator((name) => `flowqr_${name}`);
 export const subscriptions = createTable(
   "subscription",
   (d) => ({
-    id: d.uuid().primaryKey().defaultRandom(),
+    // Utiliser l'ID Polar comme clé primaire pour simplifier les upserts
+    id: d.text().primaryKey(),
     userId: d
       .text("user_id")
       .notNull()
       .references(() => user.id, { onDelete: "cascade" }),
 
-    // Lien avec Polar (pour identifier l'utilisateur dans les webhooks)
-    polarCustomerId: d.text("polar_customer_id").unique(),
+    // Lien avec Polar customer
+    polarCustomerId: d.text("polar_customer_id").notNull(),
 
-    // Infos essentielles d'abonnement
+    // Statut de l'abonnement Polar
+    status: d.text().notNull(), // 'incomplete', 'incomplete_expired', 'trialing', 'active', 'past_due', 'canceled', 'unpaid'
+
+    // ID du prix Polar
+    priceId: d.text("price_id").notNull(),
+
+    // Infos essentielles d'abonnement (calculées depuis le produit)
     plan: d.text().notNull().default("free"), // 'free', 'basic', 'pro', 'premium'
     qrCodeLimit: d.integer("qr_code_limit").notNull().default(3),
 
@@ -27,6 +34,15 @@ export const subscriptions = createTable(
       .timestamp("qr_code_reset_at", { withTimezone: true })
       .notNull()
       .default(sql`CURRENT_TIMESTAMP`),
+
+    // Périodes d'abonnement
+    currentPeriodStart: d.timestamp("current_period_start", { withTimezone: true }).notNull(),
+    currentPeriodEnd: d.timestamp("current_period_end", { withTimezone: true }),
+
+    // Annulation
+    cancelAtPeriodEnd: d.boolean("cancel_at_period_end").notNull().default(false),
+    cancelAt: d.timestamp("cancel_at", { withTimezone: true }),
+    endedAt: d.timestamp("ended_at", { withTimezone: true }),
 
     // Métadonnées
     createdAt: d
